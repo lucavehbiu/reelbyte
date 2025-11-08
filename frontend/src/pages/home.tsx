@@ -6,6 +6,9 @@ import { useRef } from 'react';
 import { badge, fadeInUp, staggerContainer, staggerFast, scaleIn, slideInLeft, slideInRight, buttonHover, cardHover } from '@/lib/animations';
 import ParticleBackground from '@/components/home/ParticleBackground';
 import CountUp from '@/components/home/CountUp';
+import Testimonials from '@/components/home/Testimonials';
+import PlatformPreview from '@/components/home/PlatformPreview';
+import FAQ from '@/components/home/FAQ';
 
 export default function Home() {
   const statsRef = useRef(null);
@@ -38,18 +41,18 @@ export default function Home() {
             </motion.div>
 
             <motion.h1
-              className="text-6xl md:text-8xl lg:text-9xl font-display font-bold tracking-[-0.02em] text-brand-navy leading-[1.1]"
+              className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-display font-bold tracking-[-0.02em] text-brand-navy leading-[1.1]"
               style={{textShadow: '0 2px 20px rgba(26, 47, 75, 0.15)'}}
               variants={fadeInUp}
             >
               Where Influencers Meet
-              <span className="block text-gradient-gold mt-2">
+              <span className="block text-gradient-gold mt-2 sm:mt-3">
                 Amsterdam's Finest
               </span>
             </motion.h1>
 
             <motion.p
-              className="text-xl md:text-2xl text-brand-charcoal/80 max-w-3xl mx-auto leading-[1.75]"
+              className="text-lg sm:text-xl md:text-2xl text-brand-charcoal/80 max-w-3xl mx-auto leading-[1.75] px-4 sm:px-0"
               variants={fadeInUp}
             >
               Connect authentic Instagram influencers with the city's most exceptional restaurants.
@@ -57,20 +60,20 @@ export default function Home() {
             </motion.p>
 
             <motion.div
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 pt-6 w-full sm:w-auto px-4 sm:px-0"
               variants={fadeInUp}
             >
-              <Link to="/browse">
-                <motion.div variants={buttonHover} whileHover="hover" whileTap="tap">
-                  <Button size="lg" className="btn-primary px-12 py-7 text-lg">
+              <Link to="/browse" className="w-full sm:w-auto">
+                <motion.div variants={buttonHover} whileHover="hover" whileTap="tap" className="w-full">
+                  <Button size="lg" className="btn-primary w-full sm:w-auto px-8 sm:px-12 py-6 sm:py-7 text-base sm:text-lg">
                     <Instagram className="w-5 h-5 mr-2" />
                     Find Restaurants
                   </Button>
                 </motion.div>
               </Link>
-              <Link to="/register">
-                <motion.div variants={buttonHover} whileHover="hover" whileTap="tap">
-                  <Button size="lg" className="btn-gold px-12 py-7 text-lg">
+              <Link to="/register" className="w-full sm:w-auto">
+                <motion.div variants={buttonHover} whileHover="hover" whileTap="tap" className="w-full">
+                  <Button size="lg" className="btn-gold w-full sm:w-auto px-8 sm:px-12 py-6 sm:py-7 text-base sm:text-lg">
                     <TrendingUp className="w-5 h-5 mr-2" />
                     List Your Restaurant
                   </Button>
@@ -100,16 +103,16 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section ref={statsRef} className="py-20 md:py-28 bg-white border-y border-brand-navy/10">
-        <div className="container mx-auto px-6">
+      <section ref={statsRef} className="py-16 sm:py-20 md:py-28 bg-white border-y border-brand-navy/10">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto"
             initial="hidden"
             animate={statsInView ? "visible" : "hidden"}
             variants={staggerFast}
           >
             <motion.div
-              className="card-premium p-10 md:p-12 text-center"
+              className="card-premium p-8 sm:p-10 md:p-12 text-center"
               variants={scaleIn}
               initial="rest"
               whileHover="hover"
@@ -126,7 +129,7 @@ export default function Home() {
             </motion.div>
 
             <motion.div
-              className="card-gold-accent p-10 md:p-12 text-center"
+              className="card-gold-accent p-8 sm:p-10 md:p-12 text-center"
               variants={scaleIn}
               initial="rest"
               whileHover="hover"
@@ -143,7 +146,7 @@ export default function Home() {
             </motion.div>
 
             <motion.div
-              className="card-premium p-10 md:p-12 text-center"
+              className="card-premium p-8 sm:p-10 md:p-12 text-center"
               variants={scaleIn}
               initial="rest"
               whileHover="hover"
@@ -162,38 +165,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <Testimonials />
+
+      {/* Platform Preview Section */}
+      <PlatformPreview />
+
       {/* How It Works Section */}
-      <section ref={howItWorksRef} className="py-28 md:py-36">
-        <div className="container mx-auto px-6">
+      <section ref={howItWorksRef} className="py-20 sm:py-24 md:py-28 lg:py-36">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16"
             initial="hidden"
             animate={howItWorksInView ? "visible" : "hidden"}
             variants={fadeInUp}
           >
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-brand-navy mb-4 tracking-[-0.01em] leading-[1.2]">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-brand-navy mb-3 sm:mb-4 tracking-[-0.01em] leading-[1.2] px-4 sm:px-0">
               How It Works
             </h2>
-            <p className="text-xl text-brand-charcoal/70 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-brand-charcoal/70 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0">
               Simple, transparent, and effective collaboration
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
             <motion.div
               className="relative"
               initial="hidden"
               animate={howItWorksInView ? "visible" : "hidden"}
               variants={slideInLeft}
             >
-              <div className="card-premium p-10 md:p-12 h-full">
+              <div className="card-premium p-8 sm:p-10 md:p-12 h-full">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-navy rounded-lg mb-6 text-white font-display font-bold text-xl">
                   1
                 </div>
-                <h3 className="text-2xl font-display font-bold text-brand-navy mb-4">
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-brand-navy mb-3 sm:mb-4">
                   Browse & Connect
                 </h3>
-                <p className="text-brand-charcoal/70 leading-relaxed">
+                <p className="text-base sm:text-base text-brand-charcoal/70 leading-relaxed">
                   Restaurants post collaboration opportunities. Influencers discover authentic dining experiences that match their brand.
                 </p>
               </div>
@@ -209,14 +218,14 @@ export default function Home() {
               variants={scaleIn}
               transition={{ delay: 0.2 }}
             >
-              <div className="card-premium p-10 md:p-12 h-full">
+              <div className="card-premium p-8 sm:p-10 md:p-12 h-full">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-gold rounded-lg mb-6 text-white font-display font-bold text-xl">
                   2
                 </div>
-                <h3 className="text-2xl font-display font-bold text-brand-navy mb-4">
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-brand-navy mb-3 sm:mb-4">
                   Create Content
                 </h3>
-                <p className="text-brand-charcoal/70 leading-relaxed">
+                <p className="text-base sm:text-base text-brand-charcoal/70 leading-relaxed">
                   Enjoy the experience and create genuine, engaging content. Share stunning Instagram Reels and posts with your audience.
                 </p>
               </div>
@@ -226,7 +235,7 @@ export default function Home() {
             </motion.div>
 
             <motion.div
-              className="card-premium p-10 md:p-12 h-full"
+              className="card-premium p-8 sm:p-10 md:p-12 h-full"
               initial="hidden"
               animate={howItWorksInView ? "visible" : "hidden"}
               variants={slideInRight}
@@ -235,10 +244,10 @@ export default function Home() {
               <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-navy rounded-lg mb-6 text-white font-display font-bold text-xl">
                 3
               </div>
-              <h3 className="text-2xl font-display font-bold text-brand-navy mb-4">
+              <h3 className="text-xl sm:text-2xl font-display font-bold text-brand-navy mb-3 sm:mb-4">
                 Get Rewarded
               </h3>
-              <p className="text-brand-charcoal/70 leading-relaxed">
+              <p className="text-base sm:text-base text-brand-charcoal/70 leading-relaxed">
                 Receive compensation and build lasting partnerships with Amsterdam's culinary scene. Track your success.
               </p>
             </motion.div>
@@ -246,43 +255,46 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <FAQ />
+
       {/* CTA Section */}
-      <section ref={ctaRef} className="py-28 md:py-40 gradient-navy">
-        <div className="container mx-auto px-6">
+      <section ref={ctaRef} className="py-20 sm:py-24 md:py-28 lg:py-40 gradient-navy">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
-            className="max-w-4xl mx-auto text-center text-white space-y-8"
+            className="max-w-4xl mx-auto text-center text-white space-y-6 sm:space-y-8"
             initial="hidden"
             animate={ctaInView ? "visible" : "hidden"}
             variants={staggerContainer}
           >
             <motion.h2
-              className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-[-0.01em] leading-[1.2]"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-[-0.01em] leading-[1.2] px-4 sm:px-0"
               variants={fadeInUp}
             >
               Ready to Amplify Your Reach?
             </motion.h2>
             <motion.p
-              className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed"
+              className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0"
               variants={fadeInUp}
             >
               Join Amsterdam's most sophisticated influencer-restaurant platform today.
             </motion.p>
             <motion.div
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 pt-4 w-full sm:w-auto px-4 sm:px-0"
               variants={fadeInUp}
             >
-              <Link to="/register?type=influencer">
-                <motion.div variants={buttonHover} whileHover="hover" whileTap="tap">
-                  <Button size="lg" className="btn-gold px-12 py-7 text-lg">
+              <Link to="/register?type=influencer" className="w-full sm:w-auto">
+                <motion.div variants={buttonHover} whileHover="hover" whileTap="tap" className="w-full">
+                  <Button size="lg" className="btn-gold w-full sm:w-auto px-8 sm:px-12 py-6 sm:py-7 text-base sm:text-lg">
                     Join as Influencer
                   </Button>
                 </motion.div>
               </Link>
-              <Link to="/register?type=restaurant">
-                <motion.div variants={buttonHover} whileHover="hover" whileTap="tap">
+              <Link to="/register?type=restaurant" className="w-full sm:w-auto">
+                <motion.div variants={buttonHover} whileHover="hover" whileTap="tap" className="w-full">
                   <Button
                     size="lg"
-                    className="bg-white text-brand-navy hover:bg-brand-cream px-12 py-7 text-lg font-semibold"
+                    className="bg-white text-brand-navy hover:bg-brand-cream w-full sm:w-auto px-8 sm:px-12 py-6 sm:py-7 text-base sm:text-lg font-semibold"
                   >
                     Join as Restaurant
                   </Button>
