@@ -9,6 +9,7 @@ import CountUp from '@/components/home/CountUp';
 import Testimonials from '@/components/home/Testimonials';
 import PlatformPreview from '@/components/home/PlatformPreview';
 import FAQ from '@/components/home/FAQ';
+import Hero3DCards from '@/components/home/Hero3DCards';
 
 export default function Home() {
   const statsRef = useRef(null);
@@ -22,12 +23,13 @@ export default function Home() {
   return (
     <div className="bg-brand-cream">
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden min-h-screen flex items-center">
         <div className="absolute inset-0 gradient-navy opacity-5"></div>
         <ParticleBackground />
-        <div className="container mx-auto px-6 py-32 md:py-48 lg:py-56 relative">
+        <Hero3DCards />
+        <div className="container mx-auto px-6 py-32 md:py-48 lg:py-56 relative z-10">
           <motion.div
-            className="max-w-5xl mx-auto text-center space-y-8"
+            className="max-w-5xl lg:max-w-3xl mx-auto lg:mx-0 text-center lg:text-left space-y-8"
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
