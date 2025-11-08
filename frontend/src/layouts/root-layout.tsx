@@ -11,7 +11,7 @@ export default function RootLayout() {
               <img
                 src="/logo.png"
                 alt="ReelByte"
-                className="h-12 w-12"
+                className="h-14 w-14 transition-transform hover:scale-105"
               />
               <span className="text-2xl font-display font-bold text-brand-navy">
                 ReelByte
