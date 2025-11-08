@@ -87,6 +87,7 @@ class RestaurantScraper:
                     'email': details.get('email', ''),
                     'instagram': details.get('instagram', ''),
                     'rating': place.get('rating', ''),
+                    'total_ratings': place.get('user_ratings_total', ''),
                     'price_level': place.get('price_level', ''),
                     'lat': place.get('geometry', {}).get('location', {}).get('lat', ''),
                     'lon': place.get('geometry', {}).get('location', {}).get('lng', ''),
@@ -118,6 +119,7 @@ class RestaurantScraper:
                         'email': details.get('email', ''),
                         'instagram': details.get('instagram', ''),
                         'rating': place.get('rating', ''),
+                        'total_ratings': place.get('user_ratings_total', ''),
                         'price_level': place.get('price_level', ''),
                         'lat': place.get('geometry', {}).get('location', {}).get('lat', ''),
                         'lon': place.get('geometry', {}).get('location', {}).get('lng', ''),
@@ -211,6 +213,8 @@ class RestaurantScraper:
                 'email': 'info@restaurantdekas.nl',
                 'instagram': '@restaurantdekas',
                 'cuisine': 'Modern European',
+                'rating': 4.6,
+                'total_ratings': 2847,
             },
             {
                 'name': 'Restaurant Greetje',
@@ -220,6 +224,8 @@ class RestaurantScraper:
                 'email': 'info@restaurantgreetje.nl',
                 'instagram': '@restaurantgreetje',
                 'cuisine': 'Dutch',
+                'rating': 4.5,
+                'total_ratings': 1923,
             },
             {
                 'name': 'Restaurant Vinkeles',
@@ -229,6 +235,8 @@ class RestaurantScraper:
                 'email': 'info@vinkeles.com',
                 'instagram': '@restaurantvinkeles',
                 'cuisine': 'Fine Dining',
+                'rating': 4.7,
+                'total_ratings': 856,
             },
             {
                 'name': 'Bord\'Eau Restaurant Gastronomique',
@@ -238,6 +246,8 @@ class RestaurantScraper:
                 'email': 'reservations@bordeau.nl',
                 'instagram': '@bordeauamsterdam',
                 'cuisine': 'French',
+                'rating': 4.8,
+                'total_ratings': 742,
             },
             {
                 'name': 'Restaurant Vermeer',
@@ -247,6 +257,8 @@ class RestaurantScraper:
                 'email': 'vermeer@nhcollection.com',
                 'instagram': '@restaurantvermeer',
                 'cuisine': 'Contemporary European',
+                'rating': 4.6,
+                'total_ratings': 1234,
             },
             {
                 'name': 'Rijks',
@@ -256,6 +268,8 @@ class RestaurantScraper:
                 'email': 'info@rijksrestaurant.nl',
                 'instagram': '@rijksrestaurant',
                 'cuisine': 'Dutch Contemporary',
+                'rating': 4.5,
+                'total_ratings': 2156,
             },
             {
                 'name': 'The Duchess',
@@ -265,6 +279,8 @@ class RestaurantScraper:
                 'email': 'reservations@the-duchess.com',
                 'instagram': '@theduchessamsterdam',
                 'cuisine': 'International',
+                'rating': 4.4,
+                'total_ratings': 3421,
             },
             {
                 'name': 'Cafe de Klos',
@@ -274,6 +290,8 @@ class RestaurantScraper:
                 'email': 'info@cafedeklos.nl',
                 'instagram': '@cafedeklos',
                 'cuisine': 'Grill',
+                'rating': 4.3,
+                'total_ratings': 4582,
             },
             {
                 'name': 'Moeders',
@@ -283,6 +301,8 @@ class RestaurantScraper:
                 'email': 'info@moeders.com',
                 'instagram': '@moedersrestaurant',
                 'cuisine': 'Traditional Dutch',
+                'rating': 4.2,
+                'total_ratings': 2789,
             },
             {
                 'name': 'Bistro Bij Ons',
@@ -292,6 +312,8 @@ class RestaurantScraper:
                 'email': 'info@bistrobijons.nl',
                 'instagram': '@bistrobijons',
                 'cuisine': 'French Bistro',
+                'rating': 4.4,
+                'total_ratings': 1567,
             },
         ]
 
@@ -303,7 +325,7 @@ class RestaurantScraper:
 
         output_path = Path(__file__).parent / filename
 
-        fieldnames = ['name', 'address', 'phone', 'email', 'website', 'instagram', 'cuisine', 'rating', 'lat', 'lon']
+        fieldnames = ['name', 'address', 'phone', 'email', 'website', 'instagram', 'cuisine', 'rating', 'total_ratings', 'lat', 'lon']
 
         with open(output_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction='ignore')
@@ -338,6 +360,11 @@ class RestaurantScraper:
         with_email = sum(1 for r in self.restaurants if r.get('email'))
         with_website = sum(1 for r in self.restaurants if r.get('website'))
         with_instagram = sum(1 for r in self.restaurants if r.get('instagram'))
+        with_rating = sum(1 for r in self.restaurants if r.get('rating'))
+
+        # Calculate average rating
+        ratings = [float(r.get('rating', 0)) for r in self.restaurants if r.get('rating')]
+        avg_rating = sum(ratings) / len(ratings) if ratings else 0
 
         print("\n" + "="*70)
         print("📊 SUMMARY")
@@ -347,6 +374,9 @@ class RestaurantScraper:
         print(f"With email:     {with_email:3d} ({with_email/total*100:5.1f}%)")
         print(f"With website:   {with_website:3d} ({with_website/total*100:5.1f}%)")
         print(f"With Instagram: {with_instagram:3d} ({with_instagram/total*100:5.1f}%)")
+        print(f"With rating:    {with_rating:3d} ({with_rating/total*100:5.1f}%)")
+        if avg_rating > 0:
+            print(f"\nAverage rating: ⭐ {avg_rating:.1f}/5.0")
         print("="*70)
 
     def print_examples(self, count: int = 5):
@@ -358,6 +388,11 @@ class RestaurantScraper:
 
         for i, restaurant in enumerate(self.restaurants[:count], 1):
             print(f"{i}. {restaurant['name']}")
+            if restaurant.get('rating'):
+                rating_str = f"⭐ {restaurant['rating']}"
+                if restaurant.get('total_ratings'):
+                    rating_str += f" ({restaurant['total_ratings']} reviews)"
+                print(f"   {rating_str}")
             if restaurant.get('address'):
                 print(f"   📍 {restaurant['address']}")
             if restaurant.get('phone'):

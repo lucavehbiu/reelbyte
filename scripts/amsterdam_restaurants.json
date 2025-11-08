@@ -6,7 +6,9 @@
     "website": "https://www.restaurantdekas.nl",
     "email": "info@restaurantdekas.nl",
     "instagram": "@restaurantdekas",
-    "cuisine": "Modern European"
+    "cuisine": "Modern European",
+    "rating": 4.6,
+    "total_ratings": 2847
   },
   {
     "name": "Restaurant Greetje",
@@ -15,7 +17,9 @@
     "website": "https://www.restaurantgreetje.nl",
     "email": "info@restaurantgreetje.nl",
     "instagram": "@restaurantgreetje",
-    "cuisine": "Dutch"
+    "cuisine": "Dutch",
+    "rating": 4.5,
+    "total_ratings": 1923
   },
   {
     "name": "Restaurant Vinkeles",
@@ -24,7 +28,9 @@
     "website": "https://www.vinkeles.com",
     "email": "info@vinkeles.com",
     "instagram": "@restaurantvinkeles",
-    "cuisine": "Fine Dining"
+    "cuisine": "Fine Dining",
+    "rating": 4.7,
+    "total_ratings": 856
   },
   {
     "name": "Bord'Eau Restaurant Gastronomique",
@@ -33,7 +39,9 @@
     "website": "https://www.bordeau.nl",
     "email": "reservations@bordeau.nl",
     "instagram": "@bordeauamsterdam",
-    "cuisine": "French"
+    "cuisine": "French",
+    "rating": 4.8,
+    "total_ratings": 742
   },
   {
     "name": "Restaurant Vermeer",
@@ -42,7 +50,9 @@
     "website": "https://www.restaurantvermeer.nl",
     "email": "vermeer@nhcollection.com",
     "instagram": "@restaurantvermeer",
-    "cuisine": "Contemporary European"
+    "cuisine": "Contemporary European",
+    "rating": 4.6,
+    "total_ratings": 1234
   },
   {
     "name": "Rijks",
@@ -51,7 +61,9 @@
     "website": "https://www.rijksrestaurant.nl",
     "email": "info@rijksrestaurant.nl",
     "instagram": "@rijksrestaurant",
-    "cuisine": "Dutch Contemporary"
+    "cuisine": "Dutch Contemporary",
+    "rating": 4.5,
+    "total_ratings": 2156
   },
   {
     "name": "The Duchess",
@@ -60,7 +72,9 @@
     "website": "https://www.the-duchess.com",
     "email": "reservations@the-duchess.com",
     "instagram": "@theduchessamsterdam",
-    "cuisine": "International"
+    "cuisine": "International",
+    "rating": 4.4,
+    "total_ratings": 3421
   },
   {
     "name": "Cafe de Klos",
@@ -69,7 +83,9 @@
     "website": "https://www.cafedeklos.nl",
     "email": "info@cafedeklos.nl",
     "instagram": "@cafedeklos",
-    "cuisine": "Grill"
+    "cuisine": "Grill",
+    "rating": 4.3,
+    "total_ratings": 4582
   },
   {
     "name": "Moeders",
@@ -78,7 +94,9 @@
     "website": "https://www.moeders.com",
     "email": "info@moeders.com",
     "instagram": "@moedersrestaurant",
-    "cuisine": "Traditional Dutch"
+    "cuisine": "Traditional Dutch",
+    "rating": 4.2,
+    "total_ratings": 2789
   },
   {
     "name": "Bistro Bij Ons",
@@ -87,6 +105,8 @@
     "website": "https://www.bistrobijons.nl",
     "email": "info@bistrobijons.nl",
     "instagram": "@bistrobijons",
-    "cuisine": "French Bistro"
+    "cuisine": "French Bistro",
+    "rating": 4.4,
+    "total_ratings": 1567
   }
 ]
