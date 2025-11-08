@@ -1,0 +1,92 @@
+[
+  {
+    "name": "De Kas",
+    "address": "Kamerlingh Onneslaan 3, 1097 DE Amsterdam",
+    "phone": "+31 20 462 4562",
+    "website": "https://www.restaurantdekas.nl",
+    "email": "info@restaurantdekas.nl",
+    "instagram": "@restaurantdekas",
+    "cuisine": "Modern European"
+  },
+  {
+    "name": "Restaurant Greetje",
+    "address": "Peperstraat 23-25, 1011 TJ Amsterdam",
+    "phone": "+31 20 779 7450",
+    "website": "https://www.restaurantgreetje.nl",
+    "email": "info@restaurantgreetje.nl",
+    "instagram": "@restaurantgreetje",
+    "cuisine": "Dutch"
+  },
+  {
+    "name": "Restaurant Vinkeles",
+    "address": "Keizersgracht 384, 1016 GB Amsterdam",
+    "phone": "+31 20 530 2010",
+    "website": "https://www.vinkeles.com",
+    "email": "info@vinkeles.com",
+    "instagram": "@restaurantvinkeles",
+    "cuisine": "Fine Dining"
+  },
+  {
+    "name": "Bord'Eau Restaurant Gastronomique",
+    "address": "Prof. Tulpplein 1, 1018 GX Amsterdam",
+    "phone": "+31 20 531 1705",
+    "website": "https://www.bordeau.nl",
+    "email": "reservations@bordeau.nl",
+    "instagram": "@bordeauamsterdam",
+    "cuisine": "French"
+  },
+  {
+    "name": "Restaurant Vermeer",
+    "address": "Prins Hendrikkade 59-72, 1012 AD Amsterdam",
+    "phone": "+31 20 556 4885",
+    "website": "https://www.restaurantvermeer.nl",
+    "email": "vermeer@nhcollection.com",
+    "instagram": "@restaurantvermeer",
+    "cuisine": "Contemporary European"
+  },
+  {
+    "name": "Rijks",
+    "address": "Museumstraat 2, 1071 XX Amsterdam",
+    "phone": "+31 20 674 7555",
+    "website": "https://www.rijksrestaurant.nl",
+    "email": "info@rijksrestaurant.nl",
+    "instagram": "@rijksrestaurant",
+    "cuisine": "Dutch Contemporary"
+  },
+  {
+    "name": "The Duchess",
+    "address": "Spuistraat 172, 1012 VT Amsterdam",
+    "phone": "+31 20 811 3322",
+    "website": "https://www.the-duchess.com",
+    "email": "reservations@the-duchess.com",
+    "instagram": "@theduchessamsterdam",
+    "cuisine": "International"
+  },
+  {
+    "name": "Cafe de Klos",
+    "address": "Kerkstraat 41, 1017 GB Amsterdam",
+    "phone": "+31 20 625 0306",
+    "website": "https://www.cafedeklos.nl",
+    "email": "info@cafedeklos.nl",
+    "instagram": "@cafedeklos",
+    "cuisine": "Grill"
+  },
+  {
+    "name": "Moeders",
+    "address": "Rozengracht 251, 1016 SX Amsterdam",
+    "phone": "+31 20 626 7957",
+    "website": "https://www.moeders.com",
+    "email": "info@moeders.com",
+    "instagram": "@moedersrestaurant",
+    "cuisine": "Traditional Dutch"
+  },
+  {
+    "name": "Bistro Bij Ons",
+    "address": "Prinsengracht 287, 1016 GW Amsterdam",
+    "phone": "+31 20 627 9013",
+    "website": "https://www.bistrobijons.nl",
+    "email": "info@bistrobijons.nl",
+    "instagram": "@bistrobijons",
+    "cuisine": "French Bistro"
+  }
+]
