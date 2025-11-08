@@ -132,12 +132,9 @@ class Project(Base):
             name="check_project_status",
         ),
         Index("idx_projects_published_at", "published_at", postgresql_where="status = 'open'"),
-        Index("idx_projects_required_skills", "required_skills", postgresql_using="gin"),
-        Index(
-            "idx_projects_full_text",
-            func.to_tsvector("english", func.concat(func.coalesce(text("title"), ""), " ", func.coalesce(text("description"), ""))),
-            postgresql_using="gin",
-        ),
+        # TODO: Add via Alembic migration - GIN indexes need special handling
+        # Index("idx_projects_required_skills", "required_skills", postgresql_using="gin"),
+        # Index("idx_projects_full_text", ..., postgresql_using="gin"),
     )
 
     def __repr__(self) -> str:

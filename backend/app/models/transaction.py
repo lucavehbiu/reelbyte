@@ -81,7 +81,7 @@ class Transaction(Base):
 
     # Metadata
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    metadata: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    transaction_metadata: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
 
     # Timestamps
     created_at: Mapped[datetime] = mapped_column(

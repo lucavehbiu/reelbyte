@@ -39,14 +39,66 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
         },
-        // ReelByte Brand Colors
+        // ReelByte Brand Colors - Sophisticated Amsterdam Edition
         brand: {
-          purple: '#8B5CF6',
-          pink: '#EC4899',
-          cyan: '#06B6D4',
-          blue: '#3B82F6',
-          dark: '#0F172A',
-          light: '#F8FAFC'
+          navy: {
+            DEFAULT: '#1A2F4B',
+            50: '#E8EDF3',
+            100: '#D1DBE7',
+            200: '#A3B7CF',
+            300: '#7593B7',
+            400: '#476F9F',
+            500: '#1A2F4B',
+            600: '#15263C',
+            700: '#101C2D',
+            800: '#0A131E',
+            900: '#05090F',
+          },
+          gold: {
+            DEFAULT: '#B28E4D',
+            50: '#F8F4EC',
+            100: '#F1E9D9',
+            200: '#E3D3B3',
+            300: '#D5BD8D',
+            400: '#C7A767',
+            500: '#B28E4D',
+            600: '#8E723E',
+            700: '#6B552E',
+            800: '#47391F',
+            900: '#241C0F',
+          },
+          copper: {
+            DEFAULT: '#C48E66',
+            50: '#F9F3ED',
+            100: '#F3E7DB',
+            200: '#E7CFB7',
+            300: '#DBB793',
+            400: '#CF9F6F',
+            500: '#C48E66',
+            600: '#9D7252',
+            700: '#76553D',
+            800: '#4E3929',
+            900: '#271C14',
+          },
+          cream: {
+            DEFAULT: '#FCFCF8',
+            50: '#FFFFFF',
+            100: '#FCFCF8',
+            200: '#F8F8F8',
+          },
+          charcoal: {
+            DEFAULT: '#333333',
+            light: '#4A4A4A',
+          },
+          sage: {
+            DEFAULT: '#6E8B7C',
+            50: '#F1F4F2',
+            100: '#E3E9E5',
+          },
+          teal: {
+            DEFAULT: '#5C858C',
+            50: '#EFF3F4',
+          }
         }
       },
       borderRadius: {
@@ -55,8 +107,9 @@ export default {
         sm: 'calc(var(--radius) - 4px)'
       },
       fontFamily: {
-        sans: ['Inter var', 'system-ui', 'sans-serif'],
-        display: ['Cal Sans', 'Inter var', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
+        accent: ['Montserrat', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace']
       },
       animation: {

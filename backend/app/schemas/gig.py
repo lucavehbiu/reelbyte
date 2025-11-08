@@ -4,10 +4,18 @@ Gig (service listing) schemas for pre-packaged creator services.
 
 from datetime import datetime
 from decimal import Decimal
+from enum import Enum
 from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, HttpUrl, ConfigDict, field_validator
+
+
+class GigStatus(str, Enum):
+    """Gig status enum."""
+    active = "active"
+    paused = "paused"
+    draft = "draft"
 
 
 # ============================================================================

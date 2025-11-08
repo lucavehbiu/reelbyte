@@ -65,7 +65,7 @@ class Notification(Base):
 
     # Indexes
     __table_args__ = (
-        Index("idx_notifications_user_created", "user_id", "created_at", postgresql_order_by="created_at DESC"),
+        Index("idx_notifications_user_created", "user_id", "created_at"),
         Index("idx_notifications_unread", "user_id", "is_read", postgresql_where=text("is_read = false")),
     )
 

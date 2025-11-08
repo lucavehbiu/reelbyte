@@ -1,51 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* ReelByte Sophisticated Palette */
+    --background: 0 0% 98.8%; /* Soft Cream #FCFCF8 */
+    --foreground: 0 0% 20%; /* Charcoal #333333 */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 20%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 262 83% 58%;
+    --popover-foreground: 0 0% 20%;
+    --primary: 210 45% 20%; /* Deep Navy #1A2F4B */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 36 40% 50%; /* Muted Gold #B28E4D */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 97%;
+    --muted-foreground: 0 0% 29%;
+    --accent: 36 40% 50%; /* Gold accent */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 30% 42%; /* Muted burgundy */
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 210 45% 20%;
     --radius: 0.75rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --background: 210 45% 12%;
+    --foreground: 0 0% 98%;
+    --card: 210 45% 15%;
+    --card-foreground: 0 0% 98%;
+    --popover: 210 45% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 36 40% 50%;
+    --primary-foreground: 210 45% 12%;
+    --secondary: 210 45% 20%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 210 45% 17%;
+    --muted-foreground: 0 0% 80%;
+    --accent: 36 40% 50%;
+    --accent-foreground: 210 45% 12%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 262 83% 58%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 45% 20%;
+    --input: 210 45% 20%;
+    --ring: 36 40% 50%;
   }
 }
 
@@ -53,26 +56,105 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-brand-cream text-brand-charcoal font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1, "kern" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-brand-navy;
+    font-feature-settings: "liga" 1, "kern" 1;
+  }
+}
+
+@layer components {
+  /* Premium Button Styles */
+  .btn-primary {
+    @apply bg-brand-navy text-white px-8 py-4 rounded-lg font-accent font-semibold
+           hover:bg-brand-navy-600 transition-all duration-300
+           shadow-lg hover:shadow-xl hover:-translate-y-0.5;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent border-2 border-brand-gold text-brand-gold px-8 py-4 rounded-lg
+           font-accent font-semibold hover:bg-brand-gold hover:text-white
+           transition-all duration-300;
+  }
+
+  .btn-gold {
+    @apply bg-brand-gold text-white px-8 py-4 rounded-lg font-accent font-semibold
+           hover:bg-brand-gold-600 transition-all duration-300
+           shadow-lg shadow-brand-gold/20 hover:shadow-xl hover:shadow-brand-gold/30;
+  }
+
+  /* Premium Card Styles */
+  .card-premium {
+    @apply bg-white rounded-2xl border border-gray-100
+           shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  .card-gold-accent {
+    @apply bg-white rounded-2xl border-2 border-brand-gold/20
+           shadow-lg hover:shadow-xl hover:border-brand-gold/40 transition-all duration-300;
   }
 }
 
 @layer utilities {
-  .glass-morphism {
-    @apply bg-white/10 backdrop-blur-lg border border-white/20;
+  /* Glass Morphism - Refined */
+  .glass-premium {
+    @apply bg-white/80 backdrop-blur-xl border border-white/40 shadow-xl;
   }
 
-  .gradient-purple-pink {
-    @apply bg-gradient-to-r from-brand-purple to-brand-pink;
+  .glass-navy {
+    @apply bg-brand-navy/90 backdrop-blur-xl border border-brand-navy/40;
   }
 
-  .gradient-cyan-blue {
-    @apply bg-gradient-to-r from-brand-cyan to-brand-blue;
+  /* Gradients - Sophisticated */
+  .gradient-navy {
+    background: linear-gradient(135deg, #1A2F4B 0%, #2A4A68 100%);
   }
 
-  .gradient-mesh {
-    @apply bg-gradient-mesh from-brand-purple via-brand-pink to-brand-cyan;
+  .gradient-gold {
+    background: linear-gradient(135deg, #B28E4D 0%, #C48E66 100%);
+  }
+
+  .gradient-cream {
+    background: linear-gradient(180deg, #FCFCF8 0%, #F8F8F8 100%);
+  }
+
+  .gradient-overlay {
+    background: linear-gradient(180deg, rgba(26, 47, 75, 0) 0%, rgba(26, 47, 75, 0.85) 100%);
+  }
+
+  /* Text Gradients */
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #B28E4D 0%, #C48E66 100%);
+  }
+
+  .text-gradient-navy {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #1A2F4B 0%, #476F9F 100%);
+  }
+
+  /* Premium Shadows */
+  .shadow-premium {
+    box-shadow: 0 10px 40px -10px rgba(26, 47, 75, 0.15);
+  }
+
+  .shadow-gold-glow {
+    box-shadow: 0 10px 30px -5px rgba(178, 142, 77, 0.3);
+  }
+
+  /* Hover Effects */
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
   }
 }

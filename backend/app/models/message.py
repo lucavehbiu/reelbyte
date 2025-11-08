@@ -91,7 +91,7 @@ class Conversation(Base):
             "conversation_type IN ('direct', 'project_inquiry', 'contract_discussion')",
             name="check_conversation_type",
         ),
-        Index("idx_conversations_last_message", "last_message_at", postgresql_order_by="last_message_at DESC"),
+        Index("idx_conversations_last_message", "last_message_at"),
     )
 
     def __repr__(self) -> str:
@@ -223,7 +223,7 @@ class Message(Base):
             "message_type IN ('text', 'file', 'video', 'image', 'system')",
             name="check_message_type",
         ),
-        Index("idx_messages_conversation_created", "conversation_id", "created_at", postgresql_order_by="created_at DESC"),
+        Index("idx_messages_conversation_created", "conversation_id", "created_at"),
     )
 
     def __repr__(self) -> str:
