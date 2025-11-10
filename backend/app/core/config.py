@@ -14,8 +14,9 @@ class Settings(BaseSettings):
 
     # API
     API_V1_PREFIX: str = "/v1"
-    ALLOWED_ORIGINS: List[str] = ["https://reelbyte.com"]
-    ALLOWED_HOSTS: List[str] = ["api.reelbyte.com"]
+    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "https://reelbyte.com"]
+    ALLOWED_HOSTS: List[str] = ["*"]  # Allow all hosts in development
+    CORS_ORIGINS: str = ""  # Comma-separated list of allowed origins for production
 
     # Database
     DATABASE_URL: str = "postgresql://user:password@localhost:5432/reelbyte"
@@ -57,6 +58,12 @@ class Settings(BaseSettings):
         case_sensitive=True,
         extra="ignore",
     )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # If CORS_ORIGINS is set, use it to override ALLOWED_ORIGINS
+        if self.CORS_ORIGINS:
+            self.ALLOWED_ORIGINS = [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
 
 
 settings = Settings()
