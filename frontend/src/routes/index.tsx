@@ -9,6 +9,7 @@ const BrowseProjects = lazy(() => import('@/pages/browse-projects'));
 const ProjectDetails = lazy(() => import('@/pages/project-details'));
 const BrowseGigs = lazy(() => import('@/pages/browse-gigs'));
 const GigDetails = lazy(() => import('@/pages/gig-details'));
+const ClientProfile = lazy(() => import('@/pages/client-profile'));
 const Dashboard = lazy(() => import('@/pages/dashboard'));
 
 // Auth pages
@@ -68,6 +69,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <ProjectDetails />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'clients/:id',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ClientProfile />
           </Suspense>
         ),
       },

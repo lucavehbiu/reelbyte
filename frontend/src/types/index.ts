@@ -95,3 +95,23 @@ export interface GigFilters {
   minRating?: number;
   search?: string;
 }
+
+export interface ClientProfile {
+  id: string;
+  userId: string;
+  companyName: string;
+  companyLogoUrl?: string;
+  industry?: string;
+  companySize?: string;
+  websiteUrl?: string;
+  description?: string;
+  totalJobsPosted: number;
+  totalSpent: string;
+  averageRating: string;
+  totalReviews: number;
+  isVerified: boolean;
+  verifiedAt?: string;
+  paymentVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
