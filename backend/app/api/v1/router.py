@@ -1,7 +1,7 @@
 """Main API v1 router that includes all endpoint modules."""
 
 from fastapi import APIRouter
-from app.api.v1 import auth, gigs
+from app.api.v1 import auth, gigs, projects
 
 # Create main v1 router
 api_router = APIRouter()
@@ -30,7 +30,7 @@ api_router.include_router(auth.router, prefix="/auth", tags=["auth"])
 api_router.include_router(gigs.router, prefix="/gigs", tags=["gigs"])
 
 # Project endpoints
-# api_router.include_router(projects.router, prefix="/projects", tags=["projects"])
+api_router.include_router(projects.router, prefix="/projects", tags=["projects"])
 
 # Proposal endpoints
 # api_router.include_router(proposals.router, prefix="/proposals", tags=["proposals"])

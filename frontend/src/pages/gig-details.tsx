@@ -116,10 +116,10 @@ export default function GigDetails() {
                   </h1>
                   <div className="flex flex-wrap items-center gap-4 text-sm">
                     <Badge className="bg-primary/90">{gig.category}</Badge>
-                    {gig.reviewCount > 0 && (
+                    {gig.reviewCount > 0 && gig.creator.rating && (
                       <div className="flex items-center gap-1">
                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        <span className="font-semibold">{gig.rating.toFixed(1)}</span>
+                        <span className="font-semibold">{parseFloat(gig.creator.rating).toFixed(1)}</span>
                         <span className="text-muted-foreground">
                           ({gig.reviewCount} reviews)
                         </span>
@@ -249,7 +249,7 @@ export default function GigDetails() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {gig.reviews.length === 0 ? (
+                  {!gig.reviews || gig.reviews.length === 0 ? (
                     <div className="text-center py-8 text-muted-foreground">
                       <p>No reviews yet. Be the first to order!</p>
                     </div>
@@ -339,7 +339,7 @@ export default function GigDetails() {
                         <span>Rating</span>
                       </div>
                       <p className="font-semibold">
-                        {gig.creator.rating.toFixed(1)} ({gig.creator.reviewCount})
+                        {parseFloat(gig.creator.rating).toFixed(1)} ({gig.creator.reviewCount})
                       </p>
                     </div>
                     <div className="space-y-1">
@@ -367,7 +367,7 @@ export default function GigDetails() {
                     </div>
                   </div>
 
-                  {gig.creator.skills.length > 0 && (
+                  {gig.creator.skills && gig.creator.skills.length > 0 && (
                     <>
                       <Separator />
                       <div>

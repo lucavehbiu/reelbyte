@@ -52,7 +52,8 @@ from app.schemas.gig import (
     GigCreate,
     GigUpdate,
     GigResponse,
-    GigListResponse,
+    GigSummary,
+    GigsListResponse,
     GigSearchFilters,
     GigOrderCreate,
 )
@@ -147,7 +148,8 @@ __all__ = [
     "GigCreate",
     "GigUpdate",
     "GigResponse",
-    "GigListResponse",
+    "GigSummary",
+    "GigsListResponse",
     "GigSearchFilters",
     "GigOrderCreate",
     # Project schemas

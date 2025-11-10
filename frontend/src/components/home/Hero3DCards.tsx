@@ -67,8 +67,8 @@ export default function Hero3DCards() {
   }, []);
 
   return (
-    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full pointer-events-none hidden lg:block">
-      <div className="relative w-full h-full flex items-center justify-center">
+    <div className="absolute inset-0 pointer-events-none hidden lg:block">
+      <div className="relative w-full h-full flex items-center justify-end pr-12">
         {sampleCards.map((card) => (
           <FloatingCard
             key={card.id}

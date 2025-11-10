@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud import gig as gig_crud
 from app.schemas.gig import (
-    GigCreate, GigUpdate, GigResponse, GigListResponse,
+    GigCreate, GigUpdate, GigResponse, GigsListResponse,
     GigSearchFilters, GigPackageResponse
 )
 from app.models.gig import Gig
@@ -45,7 +45,7 @@ def generate_slug(title: str, creator_id: UUID) -> str:
 async def list_gigs(
     db: AsyncSession,
     filters: GigSearchFilters
-) -> GigListResponse:
+) -> GigsListResponse:
     """
     List gigs with pagination, search, and filters.
 
@@ -54,14 +54,14 @@ async def list_gigs(
         filters: Search and filter parameters
 
     Returns:
-        GigListResponse with gigs and pagination info
+        GigsListResponse with gigs and pagination info
     """
     gigs, total = await gig_crud.list_gigs(db, filters)
 
     # Convert to response models
-    gig_responses = [GigResponse.from_orm(gig) for gig in gigs]
+    gig_responses = [GigResponse.model_validate(gig) for gig in gigs]
 
-    return GigListResponse(
+    return GigsListResponse(
         gigs=gig_responses,
         total=total,
         skip=filters.skip,
@@ -101,7 +101,7 @@ async def get_gig_by_id(
     if increment_views:
         gig = await gig_crud.increment_view_count(db, gig)
 
-    return GigResponse.from_orm(gig)
+    return GigResponse.model_validate(gig)
 
 
 async def get_gig_packages(
@@ -200,7 +200,7 @@ async def create_gig(
         slug=slug
     )
 
-    return GigResponse.from_orm(gig)
+    return GigResponse.model_validate(gig)
 
 
 async def update_gig(
@@ -242,7 +242,7 @@ async def update_gig(
     # Update gig
     updated_gig = await gig_crud.update_gig(db, gig, gig_update)
 
-    return GigResponse.from_orm(updated_gig)
+    return GigResponse.model_validate(updated_gig)
 
 
 async def delete_gig(
@@ -298,7 +298,7 @@ async def get_creator_gigs(
     skip: int = 0,
     limit: int = 20,
     status: Optional[str] = None
-) -> GigListResponse:
+) -> GigsListResponse:
     """
     Get all gigs for a specific creator.
 
@@ -310,15 +310,15 @@ async def get_creator_gigs(
         status: Optional status filter
 
     Returns:
-        GigListResponse
+        GigsListResponse
     """
     gigs, total = await gig_crud.get_gigs_by_creator(
         db, creator_profile_id, skip, limit, status
     )
 
-    gig_responses = [GigResponse.from_orm(gig) for gig in gigs]
+    gig_responses = [GigResponse.model_validate(gig) for gig in gigs]
 
-    return GigListResponse(
+    return GigsListResponse(
         gigs=gig_responses,
         total=total,
         skip=skip,

@@ -5,10 +5,46 @@ Gig (service listing) schemas for pre-packaged creator services.
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from uuid import UUID
 
-from pydantic import BaseModel, Field, HttpUrl, ConfigDict, field_validator
+from pydantic import BaseModel, Field, HttpUrl, ConfigDict, field_validator, computed_field
+
+
+class CreatorSummary(BaseModel):
+    """Simplified creator info for gig listings."""
+
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
+
+    id: UUID
+    user_id: UUID = Field(alias="userId")
+    display_name: str
+    username: Optional[str] = None  # Alias for display_name
+    tagline: Optional[str]
+    profile_image_url: Optional[str] = Field(None, alias="profileImageUrl")
+    avatar: Optional[str] = None  # Alias for profile_image_url
+    average_rating: Decimal = Field(alias="averageRating")
+    rating: Optional[Decimal] = None  # Alias for average_rating
+    total_reviews: int = Field(alias="totalReviews")
+    reviewCount: Optional[int] = None  # Alias for total_reviews
+    total_jobs_completed: int = Field(alias="totalJobsCompleted")
+    completedProjects: Optional[int] = None  # Alias for total_jobs_completed
+    is_verified: bool = Field(alias="isVerified")
+    response_time_hours: Optional[int] = Field(None, alias="responseTimeHours")
+    level: str = "level1"  # Default level for now
+
+    def model_post_init(self, __context):
+        """Set aliases after initialization."""
+        if self.display_name and not self.username:
+            self.username = self.display_name
+        if self.profile_image_url and not self.avatar:
+            self.avatar = self.profile_image_url
+        if self.average_rating and not self.rating:
+            self.rating = self.average_rating
+        if self.total_reviews and not self.reviewCount:
+            self.reviewCount = self.total_reviews
+        if self.total_jobs_completed and not self.completedProjects:
+            self.completedProjects = self.total_jobs_completed
 
 
 class GigStatus(str, Enum):
@@ -170,6 +206,7 @@ class GigResponse(BaseModel):
 
     id: UUID
     creator_profile_id: UUID
+    creator: CreatorSummary
     title: str
     slug: str
     description: str
@@ -199,7 +236,9 @@ class GigResponse(BaseModel):
 
     # Media
     thumbnail_url: Optional[str]
+    thumbnail: Optional[str] = None  # Alias for thumbnail_url
     video_samples: Optional[List[str]]
+    videos: Optional[List[str]] = None  # Alias for video_samples
 
     # Requirements
     requirements: Optional[str]
@@ -214,14 +253,82 @@ class GigResponse(BaseModel):
 
     # SEO
     search_tags: Optional[List[str]]
+    tags: Optional[List[str]] = None  # Alias for search_tags
 
     # Metadata
     created_at: datetime
     updated_at: datetime
     published_at: Optional[datetime]
 
+    def model_post_init(self, __context):
+        """Set aliases after initialization."""
+        # Set thumbnail alias with placeholder if None
+        if self.thumbnail_url:
+            self.thumbnail = self.thumbnail_url
+        else:
+            # Use placeholder image if no thumbnail provided
+            self.thumbnail = "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
+            self.thumbnail_url = self.thumbnail
 
-class GigListResponse(BaseModel):
+        if self.video_samples and not self.videos:
+            self.videos = self.video_samples
+        if self.search_tags and not self.tags:
+            self.tags = self.search_tags
+        # Set empty arrays if None to prevent frontend errors
+        if self.videos is None:
+            self.videos = []
+        if self.video_samples is None:
+            self.video_samples = []
+        if self.tags is None:
+            self.tags = []
+        if self.search_tags is None:
+            self.search_tags = []
+
+    @computed_field
+    @property
+    def packages(self) -> List[Dict[str, Any]]:
+        """Build packages array from individual price fields for frontend compatibility."""
+        pkgs = []
+
+        # Always include basic package
+        pkgs.append({
+            "type": "basic",
+            "name": "Basic",
+            "description": self.basic_description or "",
+            "price": float(self.basic_price),
+            "deliveryTime": self.basic_delivery_days,
+            "revisions": self.basic_revisions,
+            "features": []
+        })
+
+        # Include standard package if defined
+        if self.standard_price is not None:
+            pkgs.append({
+                "type": "standard",
+                "name": "Standard",
+                "description": self.standard_description or "",
+                "price": float(self.standard_price),
+                "deliveryTime": self.standard_delivery_days or 0,
+                "revisions": self.standard_revisions or 0,
+                "features": []
+            })
+
+        # Include premium package if defined
+        if self.premium_price is not None:
+            pkgs.append({
+                "type": "premium",
+                "name": "Premium",
+                "description": self.premium_description or "",
+                "price": float(self.premium_price),
+                "deliveryTime": self.premium_delivery_days or 0,
+                "revisions": self.premium_revisions or 0,
+                "features": []
+            })
+
+        return pkgs
+
+
+class GigSummary(BaseModel):
     """Schema for gig list item (summary view)."""
 
     model_config = ConfigDict(from_attributes=True)
@@ -240,6 +347,15 @@ class GigListResponse(BaseModel):
     created_at: datetime
 
 
+class GigsListResponse(BaseModel):
+    """Response for gigs list with pagination."""
+    gigs: List[GigResponse]
+    total: int
+    skip: int
+    limit: int
+    has_more: bool
+
+
 # ============================================================================
 # Gig Search & Filter Schemas
 # ============================================================================
@@ -248,40 +364,35 @@ class GigSearchFilters(BaseModel):
     """Schema for filtering gig search results."""
 
     # Search query
-    search_query: Optional[str] = Field(None, description="Text search in title, description, tags")
+    search: Optional[str] = Field(None, description="Text search in title, description, tags")
 
     # Filters
     category: Optional[str] = Field(None, description="Filter by category")
     subcategory: Optional[str] = Field(None, description="Filter by subcategory")
     video_type: Optional[str] = Field(None, description="Filter by video type")
+    status: Optional[GigStatus] = Field(None, description="Filter by gig status")
+    creator_profile_id: Optional[UUID] = Field(None, description="Filter by creator profile")
 
     # Price range
-    min_price: Optional[Decimal] = Field(None, ge=0, description="Minimum price")
-    max_price: Optional[Decimal] = Field(None, ge=0, description="Maximum price")
-
-    # Delivery time
-    max_delivery_days: Optional[int] = Field(None, ge=1, description="Maximum delivery days")
-
-    # Creator filters
-    verified_creators_only: bool = Field(default=False, description="Show only verified creators")
-    min_creator_rating: Optional[Decimal] = Field(None, ge=0, le=5, description="Minimum creator rating")
+    min_price: Optional[float] = Field(None, ge=0, description="Minimum price")
+    max_price: Optional[float] = Field(None, ge=0, description="Maximum price")
 
     # Tags
     tags: Optional[List[str]] = Field(None, description="Filter by tags (OR logic)")
 
     # Pagination
-    page: int = Field(default=1, ge=1, description="Page number")
-    page_size: int = Field(default=20, ge=1, le=100, description="Items per page")
+    skip: int = Field(default=0, ge=0, description="Number of records to skip")
+    limit: int = Field(default=20, ge=1, le=100, description="Number of records to return")
 
     # Sorting
-    sort_by: str = Field(default="relevance", description="Sort field")
+    sort_by: str = Field(default="created_at", description="Sort field")
     sort_order: str = Field(default="desc", description="Sort order: asc or desc")
 
     @field_validator("sort_by")
     @classmethod
     def validate_sort_by(cls, v: str) -> str:
         """Validate sort field."""
-        allowed_fields = {"relevance", "price", "popularity", "created_at", "rating"}
+        allowed_fields = {"created_at", "price", "popularity", "views"}
         if v not in allowed_fields:
             raise ValueError(f"sort_by must be one of: {', '.join(allowed_fields)}")
         return v

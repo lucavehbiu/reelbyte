@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.base import get_db
 from app.core.security import get_current_user
 from app.schemas.gig import (
-    GigCreate, GigUpdate, GigResponse, GigListResponse,
+    GigCreate, GigUpdate, GigResponse, GigsListResponse,
     GigSearchFilters, GigPackageResponse, GigStatus
 )
 from app.services import gig_service
@@ -18,7 +18,7 @@ from app.services import gig_service
 router = APIRouter()
 
 
-@router.get("/", response_model=GigListResponse)
+@router.get("/", response_model=GigsListResponse)
 async def list_gigs(
     search: Optional[str] = Query(None, description="Search in title and description"),
     category: Optional[str] = Query(None, description="Filter by category"),
@@ -208,7 +208,7 @@ async def delete_gig(
     return await gig_service.delete_gig(db, gig_id, UUID(creator_profile_id))
 
 
-@router.get("/creator/{creator_profile_id}", response_model=GigListResponse)
+@router.get("/creator/{creator_profile_id}", response_model=GigsListResponse)
 async def get_creator_gigs(
     creator_profile_id: UUID,
     skip: int = Query(0, ge=0),

@@ -408,3 +408,130 @@ class DeliverableResponse(BaseModel):
     created_at: datetime
     reviewed_at: Optional[datetime]
     approved_at: Optional[datetime]
+
+
+# ============================================================================
+# Project-specific schemas (for browsing projects by influencers)
+# ============================================================================
+
+class ClientSummary(BaseModel):
+    """Summary of client information for project listings."""
+
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
+
+    id: UUID
+    user_id: UUID = Field(alias="userId")
+    company_name: str
+    companyName: Optional[str] = None  # Alias for company_name
+    company_logo_url: Optional[str] = Field(None, alias="companyLogoUrl")
+    companyLogoUrl: Optional[str] = None  # Alias for company_logo_url
+    industry: Optional[str] = None
+    website_url: Optional[str] = None
+    is_verified: bool = Field(default=False, alias="isVerified")
+    total_jobs_posted: int = Field(default=0, alias="totalJobsPosted")
+    totalJobsPosted: Optional[int] = None  # Alias for total_jobs_posted
+    average_rating: Decimal = Field(default=Decimal("0.00"), alias="averageRating")
+    averageRating: Optional[Decimal] = None  # Alias for average_rating
+    total_reviews: int = Field(default=0, alias="totalReviews")
+    totalReviews: Optional[int] = None  # Alias for total_reviews
+    description: Optional[str] = None
+
+    def model_post_init(self, __context):
+        """Set aliases after initialization."""
+        if self.company_name and not self.companyName:
+            self.companyName = self.company_name
+        if self.company_logo_url and not self.companyLogoUrl:
+            self.companyLogoUrl = self.company_logo_url
+        if self.total_jobs_posted is not None and not self.totalJobsPosted:
+            self.totalJobsPosted = self.total_jobs_posted
+        if self.average_rating is not None and not self.averageRating:
+            self.averageRating = self.average_rating
+        if self.total_reviews is not None and not self.totalReviews:
+            self.totalReviews = self.total_reviews
+
+
+class ProjectWithClient(BaseModel):
+    """Project response with nested client information."""
+
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
+
+    id: UUID
+    client_profile_id: UUID
+    title: str
+    description: str
+
+    # Project Details
+    category: str
+    video_type: Optional[str]
+    video_duration_preference: Optional[str]
+    platform_preference: Optional[str]
+
+    # Budget
+    budget_type: Optional[str]
+    budget_min: Optional[Decimal]
+    budget_max: Optional[Decimal]
+
+    # Computed budgetFixed field for frontend
+    @property
+    def budget_fixed(self) -> Optional[Decimal]:
+        """Return budget_min as budgetFixed when budget_type is 'fixed'."""
+        if self.budget_type == 'fixed':
+            return self.budget_min
+        return None
+
+    # Timeline
+    deadline_date: Optional[date]
+    estimated_duration_days: Optional[int]
+
+    # Requirements
+    required_skills: Optional[List[str]]
+    experience_level: Optional[str]
+
+    # Stats
+    view_count: int
+    proposal_count: int
+
+    # Status
+    status: str
+
+    # Metadata
+    created_at: datetime
+    updated_at: datetime
+    published_at: Optional[datetime]
+    closed_at: Optional[datetime]
+
+    # Nested client information
+    client: ClientSummary
+    clientProfile: Optional[ClientSummary] = None  # Alias for client
+
+    def model_post_init(self, __context):
+        """Set aliases after initialization."""
+        if self.client and not self.clientProfile:
+            self.clientProfile = self.client
+
+
+class ProjectSearchFilters(BaseModel):
+    """Filters for searching projects."""
+
+    status: Optional[str] = None
+    category: Optional[str] = None
+    video_type: Optional[str] = None
+    experience_level: Optional[str] = None
+    min_budget: Optional[float] = None
+    max_budget: Optional[float] = None
+    search: Optional[str] = None
+    client_profile_id: Optional[UUID] = None
+    sort_by: str = "created_at"
+    sort_order: str = "desc"
+    skip: int = 0
+    limit: int = 20
+
+
+class ProjectsListResponse(BaseModel):
+    """Response for project list with pagination."""
+
+    projects: List[ProjectWithClient]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int

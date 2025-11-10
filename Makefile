@@ -130,7 +130,7 @@ db-revision: ## Create new database migration (usage: make db-revision MSG="your
 
 db-seed: ## Seed database with sample data
 	@echo "$(BLUE)Seeding database...$(NC)"
-	@cd backend && uv run python -m app.scripts.seed_db
+	@cd database/seeds && uv run python run_seeds.py
 	@echo "$(GREEN)✓ Database seeded$(NC)"
 
 db-reset: docker-down docker-up db-migrate db-seed ## Reset database (WARNING: deletes all data)

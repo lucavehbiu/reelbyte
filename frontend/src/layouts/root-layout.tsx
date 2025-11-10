@@ -3,24 +3,24 @@ import { Button } from '@/components/ui/button';
 
 export default function RootLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-brand-cream">
+    <div className="min-h-screen flex flex-col bg-brand-cream overflow-x-hidden">
       <header className="glass-premium border-b border-brand-navy/10 sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3 hover-lift">
+        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-2">
+            <Link to="/" className="flex items-center gap-2 sm:gap-3 hover-lift flex-shrink-0">
               <img
                 src="/logo.png"
                 alt="ReelByte"
-                className="h-14 w-14 transition-transform hover:scale-105"
+                className="h-16 w-16 sm:h-20 sm:w-20 transition-transform hover:scale-105"
               />
-              <span className="text-2xl font-display font-bold text-brand-navy">
+              <span className="text-xl sm:text-2xl font-display font-bold text-brand-navy hidden xs:block">
                 ReelByte
               </span>
             </Link>
 
             <nav className="hidden md:flex items-center gap-8">
               <Link to="/browse" className="text-brand-charcoal hover:text-brand-navy transition-colors font-medium">
-                Browse Influencers
+                Browse Opportunities
               </Link>
               <Link to="/restaurants" className="text-brand-charcoal hover:text-brand-navy transition-colors font-medium">
                 For Restaurants
@@ -30,14 +30,14 @@ export default function RootLayout() {
               </Link>
             </nav>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
               <Link to="/login">
-                <Button variant="outline" className="border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white">
+                <Button variant="outline" size="sm" className="border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white text-xs sm:text-sm px-3 sm:px-4">
                   Sign In
                 </Button>
               </Link>
               <Link to="/register">
-                <Button className="btn-gold shadow-gold-glow">
+                <Button size="sm" className="btn-gold shadow-gold-glow text-xs sm:text-sm px-3 sm:px-4">
                   Get Started
                 </Button>
               </Link>

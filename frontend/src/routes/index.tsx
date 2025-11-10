@@ -5,6 +5,8 @@ import { ProtectedRoute, AuthOnlyRoute } from '@/components/auth/protected-route
 
 // Lazy load pages for code splitting
 const Home = lazy(() => import('@/pages/home'));
+const BrowseProjects = lazy(() => import('@/pages/browse-projects'));
+const ProjectDetails = lazy(() => import('@/pages/project-details'));
 const BrowseGigs = lazy(() => import('@/pages/browse-gigs'));
 const GigDetails = lazy(() => import('@/pages/gig-details'));
 const Dashboard = lazy(() => import('@/pages/dashboard'));
@@ -52,12 +54,20 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      // Legacy route for backward compatibility
+      // Main browse route - Restaurant Projects
       {
         path: 'browse',
         element: (
           <Suspense fallback={<PageLoader />}>
-            <BrowseGigs />
+            <BrowseProjects />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'projects/:id',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ProjectDetails />
           </Suspense>
         ),
       },

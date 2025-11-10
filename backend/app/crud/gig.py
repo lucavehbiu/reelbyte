@@ -7,6 +7,7 @@ from datetime import datetime
 
 from sqlalchemy import select, func, or_, and_, desc, asc
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.models.gig import Gig
 from app.schemas.gig import GigCreate, GigUpdate, GigSearchFilters
@@ -83,7 +84,7 @@ async def get_gig_by_id(db: AsyncSession, gig_id: UUID) -> Optional[Gig]:
         Gig instance or None if not found
     """
     result = await db.execute(
-        select(Gig).where(Gig.id == gig_id)
+        select(Gig).options(selectinload(Gig.creator)).where(Gig.id == gig_id)
     )
     return result.scalar_one_or_none()
 
@@ -186,8 +187,8 @@ async def list_gigs(
     Returns:
         Tuple of (list of gigs, total count)
     """
-    # Build base query
-    query = select(Gig)
+    # Build base query with eager loading of creator profile
+    query = select(Gig).options(selectinload(Gig.creator))
     count_query = select(func.count()).select_from(Gig)
 
     # Build WHERE conditions

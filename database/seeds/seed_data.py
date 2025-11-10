@@ -13,15 +13,20 @@ import random
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# Import password hashing (we'll use passlib directly here)
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Import password hashing (use bcrypt directly to avoid compatibility issues)
+import bcrypt
 
 
 def hash_password(password: str) -> str:
     """Hash a password using bcrypt."""
-    return pwd_context.hash(password)
+    # Convert to bytes and hash
+    password_bytes = password.encode('utf-8')
+    # bcrypt has a 72 byte limit
+    if len(password_bytes) > 72:
+        password_bytes = password_bytes[:72]
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode('utf-8')
 
 
 # ============================================================================
@@ -2060,6 +2065,258 @@ async def seed_conversations_and_messages(
     print(f"✓ Created {num_conversations} conversations with messages")
 
 
+# ============================================================================
+# AMSTERDAM RESTAURANT DATA
+# ============================================================================
+
+async def seed_amsterdam_restaurants(session: AsyncSession) -> Dict[str, List[uuid.UUID]]:
+    """Seed Amsterdam restaurant clients."""
+    print("\nSeeding Amsterdam restaurants...")
+
+    try:
+        from transform_restaurants import get_amsterdam_restaurants
+    except ImportError:
+        print("  ⚠️  Could not import transform_restaurants. Skipping Amsterdam restaurants.")
+        return {"restaurant_user_ids": [], "restaurant_client_ids": []}
+
+    # Get transformed restaurant data
+    restaurants = get_amsterdam_restaurants(limit=100)
+
+    restaurant_user_ids = []
+    restaurant_client_ids = []
+
+    for restaurant in restaurants:
+        # Create user
+        user_id = uuid.uuid4()
+        await session.execute(
+            text("""
+                INSERT INTO users (
+                    id, email, password_hash, user_type, status,
+                    email_verified, created_at, updated_at
+                )
+                VALUES (
+                    :id, :email, :password_hash, :user_type, 'active',
+                    :email_verified, NOW(), NOW()
+                )
+            """),
+            {
+                "id": user_id,
+                "email": restaurant["user_email"],
+                "password_hash": hash_password(restaurant["user_password"]),
+                "user_type": restaurant["user_type"],
+                "email_verified": restaurant["email_verified"],
+            }
+        )
+        restaurant_user_ids.append(user_id)
+
+        # Create client profile
+        client_profile_id = uuid.uuid4()
+        await session.execute(
+            text("""
+                INSERT INTO client_profiles (
+                    id, user_id, company_name, company_size, industry,
+                    website_url, description, is_verified,
+                    total_jobs_posted, total_spent, average_rating, total_reviews,
+                    created_at, updated_at
+                )
+                VALUES (
+                    :id, :user_id, :company_name, :company_size, :industry,
+                    :website_url, :description, :is_verified,
+                    0, 0, 0, 0,
+                    NOW(), NOW()
+                )
+            """),
+            {
+                "id": client_profile_id,
+                "user_id": user_id,
+                "company_name": restaurant["company_name"],
+                "company_size": restaurant["company_size"],
+                "industry": restaurant["industry"],
+                "website_url": restaurant.get("website_url"),
+                "description": restaurant["description"],
+                "is_verified": restaurant["is_verified"],
+            }
+        )
+        restaurant_client_ids.append(client_profile_id)
+
+    await session.commit()
+    print(f"✓ Created {len(restaurants)} Amsterdam restaurant clients")
+
+    return {
+        "restaurant_user_ids": restaurant_user_ids,
+        "restaurant_client_ids": restaurant_client_ids,
+        "restaurants": restaurants,  # Keep restaurant data for project generation
+    }
+
+
+async def seed_restaurant_projects(
+    session: AsyncSession,
+    restaurant_data: Dict[str, Any],
+    creator_profile_ids: List[uuid.UUID]
+) -> List[uuid.UUID]:
+    """Seed collaboration projects for Amsterdam restaurants."""
+    print("\nSeeding restaurant collaboration projects...")
+
+    restaurant_client_ids = restaurant_data["restaurant_client_ids"]
+    restaurants = restaurant_data["restaurants"]
+
+    # Project templates for influencer collaborations
+    instagram_templates = [
+        {
+            "title": "Instagram Reels featuring our signature dishes",
+            "description": "We're looking for food influencers to create engaging Instagram Reels showcasing our restaurant's atmosphere and signature dishes. Must have at least 5K followers and experience creating food content.",
+            "category": "Social Media Content",
+            "video_type": "Instagram Reel",
+        },
+        {
+            "title": "Instagram food photography and stories",
+            "description": "Seeking an Instagram influencer to visit our restaurant, try our menu, and share authentic stories and posts with your followers. Focus on high-quality food photography.",
+            "category": "Social Media Content",
+            "video_type": "Instagram Post",
+        },
+    ]
+
+    tiktok_templates = [
+        {
+            "title": "TikTok video showcasing dining experience",
+            "description": "Create a fun, viral-worthy TikTok video featuring our restaurant's unique atmosphere, food preparation, or signature dishes. Looking for creators who understand food trends on TikTok.",
+            "category": "Social Media Content",
+            "video_type": "TikTok",
+        },
+        {
+            "title": "TikTok series - Amsterdam food spots",
+            "description": "Feature our restaurant in your Amsterdam food series on TikTok. We'll provide a complimentary dining experience in exchange for authentic content creation.",
+            "category": "Social Media Content",
+            "video_type": "TikTok",
+        },
+    ]
+
+    stories_templates = [
+        {
+            "title": "Instagram Stories takeover for restaurant week",
+            "description": "Looking for a local Amsterdam food influencer to do an Instagram Stories takeover during our special restaurant week event. Real-time content sharing throughout the evening.",
+            "category": "Social Media Content",
+            "video_type": "Instagram Story",
+        },
+        {
+            "title": "Live dining experience on Instagram",
+            "description": "Create live Instagram content showcasing the full dining experience at our restaurant. Perfect for influencers who specialize in real-time engagement.",
+            "category": "Social Media Content",
+            "video_type": "Instagram Live",
+        },
+    ]
+
+    all_templates = instagram_templates + tiktok_templates + stories_templates
+    project_ids = []
+
+    # Random allocation: 0-3 projects per restaurant
+    for i, (client_id, restaurant) in enumerate(zip(restaurant_client_ids, restaurants)):
+        # Determine number of projects (30% get 0, 40% get 1, 20% get 2, 10% get 3)
+        rand = random.random()
+        if rand < 0.3:
+            num_projects = 0
+        elif rand < 0.7:
+            num_projects = 1
+        elif rand < 0.9:
+            num_projects = 2
+        else:
+            num_projects = 3
+
+        if num_projects == 0:
+            continue
+
+        # Select random project templates
+        selected_templates = random.sample(all_templates, min(num_projects, len(all_templates)))
+
+        for template in selected_templates:
+            project_id = uuid.uuid4()
+
+            # Get budget range from restaurant data
+            budget_min, budget_max = restaurant["budget_range"]
+
+            # Determine project status (70% open, 20% in_progress, 10% completed)
+            status_rand = random.random()
+            if status_rand < 0.7:
+                status = "open"
+            elif status_rand < 0.9:
+                status = "in_progress"
+            else:
+                status = "completed"
+
+            await session.execute(
+                text("""
+                    INSERT INTO projects (
+                        id, client_profile_id, title, description, category,
+                        video_type, budget_type, budget_min, budget_max,
+                        deadline_date, experience_level, status,
+                        view_count, proposal_count, created_at, updated_at, published_at
+                    )
+                    VALUES (
+                        :id, :client_profile_id, :title, :description, :category,
+                        :video_type, 'range', :budget_min, :budget_max,
+                        :deadline_date, :experience_level, :status,
+                        :view_count, :proposal_count, NOW(), NOW(), NOW()
+                    )
+                """),
+                {
+                    "id": project_id,
+                    "client_profile_id": client_id,
+                    "title": template["title"],
+                    "description": template["description"],
+                    "category": template["category"],
+                    "video_type": template.get("video_type"),
+                    "budget_min": Decimal(str(budget_min)),
+                    "budget_max": Decimal(str(budget_max)),
+                    "deadline_date": (datetime.now() + timedelta(days=random.randint(7, 45))).date(),
+                    "experience_level": random.choice(["entry", "intermediate", "expert", "any"]),
+                    "status": status,
+                    "view_count": random.randint(10, 300),
+                    "proposal_count": random.randint(0, 12) if status != "completed" else random.randint(5, 20),
+                }
+            )
+            project_ids.append(project_id)
+
+            # Create 0-3 proposals for open projects
+            if status == "open" and creator_profile_ids:
+                num_proposals = random.randint(0, 3)
+                selected_creators = random.sample(
+                    creator_profile_ids,
+                    min(num_proposals, len(creator_profile_ids))
+                )
+
+                for creator_id in selected_creators:
+                    proposal_id = uuid.uuid4()
+                    proposed_budget = Decimal(str(random.randint(budget_min, budget_max)))
+
+                    await session.execute(
+                        text("""
+                            INSERT INTO proposals (
+                                id, project_id, creator_profile_id,
+                                cover_letter, proposed_budget, proposed_timeline_days,
+                                status, created_at, updated_at
+                            )
+                            VALUES (
+                                :id, :project_id, :creator_profile_id,
+                                :cover_letter, :proposed_budget, :proposed_timeline_days,
+                                'pending', NOW(), NOW()
+                            )
+                        """),
+                        {
+                            "id": proposal_id,
+                            "project_id": project_id,
+                            "creator_profile_id": creator_id,
+                            "cover_letter": "I'd love to create content for your restaurant! I specialize in food content and have experience working with Amsterdam restaurants.",
+                            "proposed_budget": proposed_budget,
+                            "proposed_timeline_days": random.randint(3, 14),
+                        }
+                    )
+
+    await session.commit()
+    print(f"✓ Created {len(project_ids)} restaurant collaboration projects")
+
+    return project_ids
+
+
 async def run_all_seeds(session: AsyncSession) -> None:
     """Run all seed functions in order."""
     print("\n" + "=" * 60)
@@ -2077,6 +2334,10 @@ async def run_all_seeds(session: AsyncSession) -> None:
 
     # Seed projects and proposals
     await seed_projects_and_proposals(session, client_profile_ids, creator_profile_ids)
+
+    # Seed Amsterdam restaurants
+    restaurant_data = await seed_amsterdam_restaurants(session)
+    restaurant_project_ids = await seed_restaurant_projects(session, restaurant_data, creator_profile_ids)
 
     # Seed contracts and reviews
     await seed_contracts_and_reviews(
@@ -2096,8 +2357,10 @@ async def run_all_seeds(session: AsyncSession) -> None:
     print("\nSummary:")
     print(f"  • {len(creator_profile_ids)} Creator Users")
     print(f"  • {len(client_profile_ids)} Client Users")
+    print(f"  • {len(restaurant_data['restaurant_client_ids'])} Amsterdam Restaurant Clients")
     print(f"  • {len(gig_ids)} Gigs (with Basic, Standard, Premium packages)")
     print(f"  • 5 Projects with multiple proposals")
+    print(f"  • {len(restaurant_project_ids)} Restaurant Collaboration Projects")
     print(f"  • 10-15 Completed contracts with reviews")
     print(f"  • 5-8 Conversations with messages")
     print("\nAll test users have password: password123")
