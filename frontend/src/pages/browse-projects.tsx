@@ -11,6 +11,8 @@ import { useInfiniteProjects } from '@/hooks/use-projects';
 import { useInfiniteGigs } from '@/hooks/use-gigs';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
+import { PullToRefreshIndicator } from '@/components/ui/pull-to-refresh';
 import type { ProjectFilters as Filters } from '@/lib/api/projects';
 import { cn } from '@/lib/utils';
 
@@ -41,6 +43,7 @@ export default function BrowseProjects() {
     isFetchingNextPage,
     isLoading,
     isError,
+    refetch: refetchProjects,
   } = useInfiniteProjects(activeFilters);
 
   // Gigs query (for Influencer Services tab)
@@ -51,7 +54,20 @@ export default function BrowseProjects() {
     isFetchingNextPage: isFetchingNextGigsPage,
     isLoading: isLoadingGigs,
     isError: isErrorGigs,
+    refetch: refetchGigs,
   } = useInfiniteGigs({ search: debouncedSearch || undefined });
+
+  // Pull-to-refresh for mobile - switches based on active tab
+  const pullToRefresh = usePullToRefresh({
+    onRefresh: async () => {
+      if (activeTab === 'projects') {
+        await refetchProjects();
+      } else {
+        await refetchGigs();
+      }
+    },
+    enabled: typeof window !== 'undefined' && window.innerWidth < 768, // Only enable on mobile
+  });
 
   // Intersection observer for infinite scroll - Projects
   const { ref: loadMoreRef, isIntersecting } = useIntersectionObserver({
@@ -90,6 +106,9 @@ export default function BrowseProjects() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
+      {/* Pull to Refresh Indicator */}
+      <PullToRefreshIndicator {...pullToRefresh} />
+
       {/* Hero Section */}
       <div className="border-b bg-gradient-to-r from-brand-gold/5 via-brand-navy/5 to-brand-copper/5 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-12">

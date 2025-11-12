@@ -1,54 +1,150 @@
 import { Outlet, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { BottomNav } from '@/components/ui/bottom-nav';
+import { useState } from 'react';
 
 export default function RootLayout() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navLinks = [
+    { to: '/browse', label: 'Browse Opportunities' },
+    { to: '/restaurants', label: 'For Restaurants' },
+    { to: '/how-it-works', label: 'How It Works' },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-brand-cream overflow-x-hidden">
       <header className="glass-premium border-b border-brand-navy/10 sticky top-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-2">
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 hover-lift flex-shrink-0">
+            {/* Logo */}
+            <Link
+              to="/"
+              className="flex items-center gap-2 sm:gap-3 hover-lift flex-shrink-0 group"
+              onClick={() => setMobileMenuOpen(false)}
+            >
               <img
                 src="/logo.png"
                 alt="ReelByte"
-                className="h-16 w-16 sm:h-20 sm:w-20 transition-transform hover:scale-105"
+                className="h-14 w-14 sm:h-20 sm:w-20 transition-transform group-hover:scale-105"
               />
               <span className="text-xl sm:text-2xl font-display font-bold text-brand-navy hidden xs:block">
                 ReelByte
               </span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-8">
-              <Link to="/browse" className="text-brand-charcoal hover:text-brand-navy transition-colors font-medium">
-                Browse Opportunities
-              </Link>
-              <Link to="/restaurants" className="text-brand-charcoal hover:text-brand-navy transition-colors font-medium">
-                For Restaurants
-              </Link>
-              <Link to="/how-it-works" className="text-brand-charcoal hover:text-brand-navy transition-colors font-medium">
-                How It Works
-              </Link>
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="text-brand-charcoal hover:text-brand-navy transition-all duration-200 font-medium relative group"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-gold transition-all duration-200 group-hover:w-full" />
+                </Link>
+              ))}
             </nav>
 
-            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            {/* Desktop Auth Buttons */}
+            <div className="hidden md:flex items-center gap-2 sm:gap-3 flex-shrink-0">
               <Link to="/login">
-                <Button variant="outline" size="sm" className="border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white text-xs sm:text-sm px-3 sm:px-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white transition-all duration-200 text-xs sm:text-sm px-3 sm:px-4"
+                >
                   Sign In
                 </Button>
               </Link>
               <Link to="/register">
-                <Button size="sm" className="btn-gold shadow-gold-glow text-xs sm:text-sm px-3 sm:px-4">
+                <Button
+                  size="sm"
+                  className="btn-gold shadow-gold-glow text-xs sm:text-sm px-3 sm:px-4 hover:scale-105 transition-transform duration-200"
+                >
                   Get Started
                 </Button>
               </Link>
             </div>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg hover:bg-brand-navy/10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-navy/20"
+              aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              <span
+                className={`block w-6 h-0.5 bg-brand-navy transition-all duration-300 ${
+                  mobileMenuOpen ? 'rotate-45 translate-y-1.5' : '-translate-y-1'
+                }`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-brand-navy transition-all duration-300 ${
+                  mobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                }`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-brand-navy transition-all duration-300 ${
+                  mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : 'translate-y-1'
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        <div
+          className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+            mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
+          onClick={() => setMobileMenuOpen(false)}
+          style={{ top: '90px' }}
+        />
+
+        {/* Mobile Menu Drawer */}
+        <div
+          className={`fixed right-0 top-[90px] bottom-0 w-80 max-w-[85vw] bg-white border-l border-brand-navy/10 shadow-2xl transition-transform duration-300 ease-in-out md:hidden overflow-y-auto ${
+            mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          <nav className="flex flex-col p-6 space-y-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-brand-charcoal hover:text-brand-navy hover:bg-brand-navy/5 transition-all duration-200 font-medium py-3 px-4 rounded-lg"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="p-6 border-t border-brand-navy/10 space-y-3">
+            <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="block">
+              <Button
+                variant="outline"
+                className="w-full border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white"
+              >
+                Sign In
+              </Button>
+            </Link>
+            <Link to="/register" onClick={() => setMobileMenuOpen(false)} className="block">
+              <Button className="w-full btn-gold shadow-gold-glow">
+                Get Started
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
 
-      <main className="flex-1">
+      <main className="flex-1 pb-16 lg:pb-0">
         <Outlet />
       </main>
+
+      <BottomNav />
 
       <footer className="bg-brand-navy text-white mt-auto">
         <div className="container mx-auto px-6 py-12">

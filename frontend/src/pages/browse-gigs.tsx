@@ -8,6 +8,8 @@ import { GigFilters } from '@/components/gigs/gig-filters';
 import { useInfiniteGigs } from '@/hooks/use-gigs';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
+import { PullToRefreshIndicator } from '@/components/ui/pull-to-refresh';
 import type { GigFilters as Filters } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -34,7 +36,16 @@ export default function BrowseGigs() {
     isFetchingNextPage,
     isLoading,
     isError,
+    refetch,
   } = useInfiniteGigs(activeFilters);
+
+  // Pull-to-refresh for mobile
+  const pullToRefresh = usePullToRefresh({
+    onRefresh: async () => {
+      await refetch();
+    },
+    enabled: typeof window !== 'undefined' && window.innerWidth < 768, // Only enable on mobile
+  });
 
   // Intersection observer for infinite scroll
   const { ref: loadMoreRef, isIntersecting } = useIntersectionObserver({
@@ -59,6 +70,9 @@ export default function BrowseGigs() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
+      {/* Pull to Refresh Indicator */}
+      <PullToRefreshIndicator {...pullToRefresh} />
+
       {/* Hero Section */}
       <div className="border-b bg-gradient-to-r from-primary/5 via-purple-500/5 to-pink-500/5 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-12">
