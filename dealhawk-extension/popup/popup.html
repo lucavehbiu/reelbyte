@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DealHawk - Lego Arbitrage Alerts</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="hawk-emoji">🦅</span>
+        <h1>DealHawk</h1>
+      </div>
+      <div class="header-actions">
+        <button id="refreshBtn" class="icon-btn" title="Refresh now">
+          <span class="refresh-icon">↻</span>
+        </button>
+        <button id="settingsBtn" class="icon-btn" title="Settings">
+          <span class="settings-icon">⚙️</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <div class="status-item">
+        <span class="status-label">Last Check:</span>
+        <span id="lastScrapeTime" class="status-value">Never</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Opportunities:</span>
+        <span id="opportunityCount" class="status-value">0</span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="opportunities">Opportunities</button>
+        <button class="tab-btn" data-tab="settings">Settings</button>
+      </div>
+
+      <!-- Opportunities Tab -->
+      <div id="opportunitiesTab" class="tab-content active">
+        <div class="opportunities-header">
+          <p class="subtitle">Live arbitrage opportunities for retiring Lego sets</p>
+          <button id="clearOpportunitiesBtn" class="btn-secondary btn-small">Clear All</button>
+        </div>
+
+        <div id="loadingState" class="loading-state">
+          <div class="spinner"></div>
+          <p>Scanning for deals...</p>
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <span class="empty-icon">🔍</span>
+          <p>No opportunities found yet</p>
+          <p class="empty-subtitle">DealHawk will alert you when retiring Lego sets are available below your price threshold</p>
+          <button id="manualScrapeBtn" class="btn-primary">Scan Now</button>
+        </div>
+
+        <div id="opportunitiesList" class="opportunities-list"></div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div id="settingsTab" class="tab-content">
+        <div class="settings-section">
+          <h3>General Settings</h3>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="enabledCheckbox" checked>
+              <span>Enable DealHawk</span>
+            </label>
+            <p class="setting-description">Turn on/off automatic scanning</p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="notificationsCheckbox" checked>
+              <span>Browser Notifications</span>
+            </label>
+            <p class="setting-description">Get notified when new opportunities are found</p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <span>Scan Interval</span>
+            </label>
+            <select id="scrapeIntervalSelect" class="setting-input">
+              <option value="15">Every 15 minutes</option>
+              <option value="30" selected>Every 30 minutes</option>
+              <option value="60">Every hour</option>
+              <option value="120">Every 2 hours</option>
+            </select>
+            <p class="setting-description">How often to check for new deals</p>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <span>Price Threshold (%)</span>
+            </label>
+            <input type="number" id="priceThresholdInput" class="setting-input" min="0" max="100" value="20">
+            <p class="setting-description">Alert when retailer price is this % below MSRP</p>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>Retailers</h3>
+          <p class="section-subtitle">Which retailers to check for deals</p>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="amazonCheckbox" checked>
+              <span>Amazon</span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="walmartCheckbox" checked>
+              <span>Walmart</span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <label class="setting-label">
+              <input type="checkbox" id="targetCheckbox" checked>
+              <span>Target</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-actions">
+          <button id="saveSettingsBtn" class="btn-primary">Save Settings</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <a href="https://github.com/yourusername/dealhawk" target="_blank" class="footer-link">About</a>
+      <span class="footer-separator">•</span>
+      <a href="#" id="viewErrorsLink" class="footer-link">View Errors</a>
+      <span class="footer-separator">•</span>
+      <span class="version">v1.0.0</span>
+    </footer>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
