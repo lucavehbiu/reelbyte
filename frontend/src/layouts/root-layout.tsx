@@ -23,11 +23,13 @@ export default function RootLayout() {
               className="flex items-center gap-2 sm:gap-3 hover-lift flex-shrink-0 group"
               onClick={() => setMobileMenuOpen(false)}
             >
-              <img
-                src="/logo.png"
-                alt="ReelByte"
-                className="h-14 w-14 sm:h-20 sm:w-20 transition-transform group-hover:scale-105"
-              />
+              <div className="relative h-14 w-14 sm:h-20 sm:w-20 flex items-center justify-center">
+                <img
+                  src="/logo.png"
+                  alt="ReelByte"
+                  className="absolute inset-0 h-full w-full scale-[1.4] transition-transform group-hover:scale-[1.45]"
+                />
+              </div>
               <span className="text-xl sm:text-2xl font-display font-bold text-brand-navy hidden xs:block">
                 ReelByte
               </span>

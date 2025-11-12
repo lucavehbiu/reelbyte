@@ -20,7 +20,7 @@ type ViewMode = 'grid' | 'list';
 type BrowseTab = 'projects' | 'gigs';
 
 export default function BrowseProjects() {
-  const [activeTab, setActiveTab] = useState<BrowseTab>('projects');
+  const [activeTab, setActiveTab] = useState<BrowseTab>('gigs');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({});
@@ -109,47 +109,164 @@ export default function BrowseProjects() {
       {/* Pull to Refresh Indicator */}
       <PullToRefreshIndicator {...pullToRefresh} />
 
-      {/* Hero Section */}
-      <div className="border-b bg-gradient-to-r from-brand-gold/5 via-brand-navy/5 to-brand-copper/5 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-3xl mx-auto text-center space-y-6"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Discover{' '}
-              <span className="text-gradient-gold bg-clip-text text-transparent">
-                Restaurant Collaborations
-              </span>
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Browse collaboration opportunities from Amsterdam's finest restaurants
-            </p>
+      {/* Hero Section - MAGICAL ✨ */}
+      <div className="relative border-b overflow-hidden">
+        {/* Animated Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-gold/10 via-brand-copper/5 to-brand-navy/10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-gold/20 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-brand-navy/20 via-transparent to-transparent" />
 
-            {/* Search Bar */}
-            <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Search for restaurants, cuisine types, collaboration types..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-12 h-14 text-base border-2 focus:border-brand-gold transition-all shadow-lg"
-              />
-              {searchQuery && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
+        {/* Floating Shapes */}
+        <motion.div
+          animate={{
+            y: [0, -20, 0],
+            rotate: [0, 5, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-br from-brand-gold/20 to-brand-copper/20 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            y: [0, 20, 0],
+            rotate: [0, -5, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute bottom-20 left-20 w-40 h-40 bg-gradient-to-br from-brand-navy/20 to-brand-copper/20 rounded-full blur-3xl"
+        />
+
+        <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+            className="max-w-4xl mx-auto text-center space-y-8"
+          >
+            {/* Title with Stagger Animation */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight"
+            >
+              Discover{' '}
+              <span className="relative inline-block">
+                <span className="relative z-10 bg-gradient-to-r from-brand-gold via-brand-copper to-brand-navy bg-clip-text text-transparent">
+                  Restaurant Collaborations
+                </span>
+                <motion.span
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+                  className="absolute bottom-2 left-0 right-0 h-3 bg-gradient-to-r from-brand-gold/30 to-brand-copper/30 -z-10 origin-left"
+                />
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-lg md:text-xl text-brand-charcoal/70 font-medium max-w-2xl mx-auto"
+            >
+              Browse collaboration opportunities from Amsterdam's finest restaurants
+            </motion.p>
+
+            {/* Enhanced Search Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              className="relative max-w-3xl mx-auto"
+            >
+              <div className="relative group">
+                {/* Glow Effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-brand-gold via-brand-copper to-brand-navy rounded-2xl opacity-30 group-hover:opacity-60 blur-lg transition-all duration-500" />
+
+                <div className="relative">
+                  {searchQuery && (
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-brand-navy/40 group-hover:text-brand-gold transition-colors duration-300 z-10" />
+                  )}
+                  <Input
+                    type="text"
+                    placeholder="Search for restaurants, cuisine types, collaboration types..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className={cn(
+                      "relative h-16 md:h-18 text-base md:text-lg border-2 border-brand-cream bg-white/90 backdrop-blur-xl rounded-2xl focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/20 transition-all duration-300 shadow-2xl font-medium placeholder:text-brand-charcoal/40 hover:shadow-3xl",
+                      searchQuery ? "pl-16 pr-16" : "pl-6 pr-16"
+                    )}
+                  />
+                  {searchQuery && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                    >
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setSearchQuery('')}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full hover:bg-brand-gold/10 transition-all"
+                      >
+                        <X className="h-5 w-5 text-brand-charcoal/60" />
+                      </Button>
+                    </motion.div>
+                  )}
+
+                  {/* Search Icon Animation */}
+                  {!searchQuery && (
+                    <motion.div
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                    >
+                      <div className="h-11 w-11 rounded-full bg-gradient-to-br from-brand-gold to-brand-copper flex items-center justify-center shadow-lg">
+                        <Search className="h-5 w-5 text-white" />
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+              </div>
+
+              {/* Quick Search Tags */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="flex flex-wrap justify-center gap-2 mt-4"
+              >
+                {['Social Media', 'Video Editing', 'Photography', 'Animation'].map((tag, index) => (
+                  <motion.button
+                    key={tag}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setSearchQuery(tag)}
+                    className="px-4 py-2 text-sm font-medium rounded-full bg-white/80 backdrop-blur-sm border border-brand-navy/10 text-brand-navy hover:bg-gradient-to-r hover:from-brand-gold hover:to-brand-copper hover:text-white hover:border-transparent transition-all duration-300 shadow-md hover:shadow-lg"
+                  >
+                    {tag}
+                  </motion.button>
+                ))}
+              </motion.div>
+            </motion.div>
           </motion.div>
+        </div>
+
+        {/* Bottom Wave */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg className="w-full h-12 fill-background" viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,32L80,29.3C160,27,320,21,480,21.3C640,21,800,27,960,26.7C1120,27,1280,21,1360,18.7L1440,16L1440,48L1360,48C1280,48,1120,48,960,48C800,48,640,48,480,48C320,48,160,48,80,48L0,48Z" />
+          </svg>
         </div>
       </div>
 
@@ -159,13 +276,13 @@ export default function BrowseProjects() {
           {/* Tabs Navigation */}
           <div className="flex justify-center mb-8">
             <TabsList className="grid w-full max-w-md grid-cols-2">
-              <TabsTrigger value="projects" className="gap-2">
-                <Briefcase className="h-4 w-4" />
-                Restaurant Projects
-              </TabsTrigger>
               <TabsTrigger value="gigs" className="gap-2">
                 <Users className="h-4 w-4" />
                 Influencer Services
+              </TabsTrigger>
+              <TabsTrigger value="projects" className="gap-2">
+                <Briefcase className="h-4 w-4" />
+                Restaurant Projects
               </TabsTrigger>
             </TabsList>
           </div>
